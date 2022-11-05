@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/dlip/get-vercel-url-action/issues"
   },
-  "homepage": "https://github.com/dlip/get-vercel-url-action#readme"
+  "homepage": "https://github.com/dlip/get-vercel-url-action#readme",
+  "dependencies": {
+    "@actions/core": "^1.10.0"
+  }
 }
