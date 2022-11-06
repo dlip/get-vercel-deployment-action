@@ -13,8 +13,8 @@ inputs:
   github-branch:
     description: 'Github branch'
     required: true
-  github-hash:
-    description: 'Github commit hash'
+  github-commit:
+    description: 'Github commit commit'
     required: true
   start-timeout:
     description: 'How long to wait to see deployment starting'

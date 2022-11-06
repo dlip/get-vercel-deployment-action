@@ -6,7 +6,7 @@ try {
   const vercel-org-id = core.getInput('vercel-org-id');
   const vercel-project-id = core.getInput('vercel-project-id');
   const github-branch = core.getInput('github-branch');
-  const github-hash = core.getInput('github-hash');
+  const github-commit = core.getInput('github-commit');
   const start-timeout = core.getInput('start-timeout');
   const finish-timeout = core.getInput('finish-timeout');
   const wait = core.getInput('wait');
@@ -14,7 +14,7 @@ try {
   const vercel-org-id = console.log({vercel-org-id});
   const vercel-project-id = console.log({vercel-project-id});
   const github-branch = console.log({github-branch});
-  const github-hash = console.log({github-hash});
+  const github-commit = console.log({github-commit});
   const start-timeout = console.log({start-timeout});
   const finish-timeout = console.log({finish-timeout});
   const wait = console.log({wait});
