@@ -18,7 +18,7 @@ inputs:
     required: true
   start-timeout:
     description: 'How long to wait to see deployment starting'
-    default: 30
+    default: 600
   finish-timeout:
     description: 'How long to wait to see deployment finish'
     default: 600
