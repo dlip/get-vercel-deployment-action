@@ -1,4 +1,4 @@
-import core from "@actions/core";
+import * as core from "@actions/core";
 
 try {
   const args = {
@@ -15,5 +15,6 @@ try {
 
   core.setOutput("deployment-url", "todo");
 } catch (error: unknown) {
+  console.error(error);
   core.setFailed((error as Error).message);
 }
