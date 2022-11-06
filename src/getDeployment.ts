@@ -9,6 +9,7 @@ export type GetDeploymentArgs = {
   githubCommit: string;
   startTimeout: number;
   finishTimeout: number;
+  paginationLimit: number;
   wait: boolean;
 };
 
@@ -107,16 +108,17 @@ export async function getDeployment({
   githubCommit,
   startTimeout,
   finishTimeout,
+  paginationLimit,
   wait,
 }: GetDeploymentArgs) {
   const deployment = await retry(
     async () => {
       console.log("Finding deployment...");
-      let until = null;
-      while (true) {
+      let next = null;
+      for (let page = 0; page < paginationLimit; page++) {
         let url = `https://api.vercel.com/v6/deployments?teamId=${vercelOrgId}&projectId=${vercelProjectId}`;
-        if (until) {
-          url += `&until=${until}`;
+        if (next) {
+          url += `&until=${next}`;
         }
         const response = await fetch(url, {
           headers: {
@@ -125,20 +127,45 @@ export async function getDeployment({
           method: "get",
         });
         const result = (await response.json()) as DeploymentResponse;
-        const deployment = result.deployments.find((d) => d.meta.githubCommitRef === githubBranch && d.meta.githubCommitSha === githubCommit)
+        const deployment = result.deployments.find(
+          (d) =>
+            d.meta.githubCommitRef === githubBranch &&
+            d.meta.githubCommitSha === githubCommit
+        );
         if (deployment) {
           return deployment;
         }
-        if(result.pagination.next) {
-          until = result.pagination.next;
+        if (result.pagination.next) {
+          next = result.pagination.next;
         } else {
           break;
         }
       }
-      throw new Error('Deployment not found');
+      throw new Error("Deployment not found");
     },
     { timeout: startTimeout * 1000, delay: 1000 }
   );
+  console.log("Deployment found!");
+  if (wait) {
+    console.log("Waiting for deployment to finish...");
+    await retry(
+      async () => {
+        let url = `https://api.vercel.com/v13/deployments/${deployment.uid}`;
+        const response = await fetch(url, {
+          headers: {
+            Authorization: `Bearer ${vercelToken}`,
+          },
+          method: "get",
+        });
+        if ((await response.json()).readyState === "READY") {
+          console.log("Deployment is ready!");
+          return;
+        }
+        throw new Error("Deployment not found");
+      },
+      { timeout: finishTimeout * 1000, delay: 1000 }
+    );
+  }
 
   return deployment;
 }

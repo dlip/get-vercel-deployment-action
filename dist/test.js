@@ -34,6 +34,7 @@ const args = {
     githubCommit: process.env.GITHUB_SHA,
     startTimeout: parseInt(process.env.START_TIMEOUT),
     finishTimeout: parseInt(process.env.FINISH_TIMEOUT),
+    paginationLimit: parseInt(process.env.PAGINATION_LIMIT),
     wait: process.env.WAIT === 'true',
 };
 (0, getDeployment_1.getDeployment)(args).then(console.log);

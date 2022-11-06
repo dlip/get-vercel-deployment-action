@@ -10,11 +10,12 @@ try {
     githubCommit: core.getInput("github-commit"),
     startTimeout: parseInt(core.getInput("start-timeout")),
     finishTimeout: parseInt(core.getInput("finish-timeout")),
+    paginationLimit: parseInt(core.getInput("pagination-limit")),
     wait: core.getBooleanInput("wait"),
   };
   console.log(args);
 
-  getDeployment(args).then((deployment: any) => {
+  getDeployment(args).then((deployment) => {
     core.setOutput("deployment-url", deployment.url);
   });
 } catch (error: unknown) {

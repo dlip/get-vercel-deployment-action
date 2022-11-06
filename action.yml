@@ -22,6 +22,9 @@ inputs:
   finish-timeout:
     description: 'How long to wait to see deployment finish'
     default: 600
+  pagination-limit:
+    description: 'How many pages to search for the deployment'
+    default: 2
   wait:
     description: 'Should it wait until the deployment is ready'
     default: true

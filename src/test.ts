@@ -10,6 +10,7 @@ const args: GetDeploymentArgs = {
   githubCommit: process.env.GITHUB_SHA as string,
   startTimeout: parseInt(process.env.START_TIMEOUT as string),
   finishTimeout: parseInt(process.env.FINISH_TIMEOUT as string),
+  paginationLimit: parseInt(process.env.PAGINATION_LIMIT as string),
   wait: process.env.WAIT === 'true',
 };
 

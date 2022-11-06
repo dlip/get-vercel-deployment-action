@@ -15,15 +15,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getDeployment = void 0;
 const cross_fetch_1 = __importDefault(require("cross-fetch"));
 const ts_retry_promise_1 = require("ts-retry-promise");
-function getDeployment({ vercelToken, vercelOrgId, vercelProjectId, githubBranch, githubCommit, startTimeout, finishTimeout, wait, }) {
+function getDeployment({ vercelToken, vercelOrgId, vercelProjectId, githubBranch, githubCommit, startTimeout, finishTimeout, paginationLimit, wait, }) {
     return __awaiter(this, void 0, void 0, function* () {
         const deployment = yield (0, ts_retry_promise_1.retry)(() => __awaiter(this, void 0, void 0, function* () {
             console.log("Finding deployment...");
-            let until = null;
-            while (true) {
+            let next = null;
+            for (let page = 0; page < paginationLimit; page++) {
                 let url = `https://api.vercel.com/v6/deployments?teamId=${vercelOrgId}&projectId=${vercelProjectId}`;
-                if (until) {
-                    url += `&until=${until}`;
+                if (next) {
+                    url += `&until=${next}`;
                 }
                 const response = yield (0, cross_fetch_1.default)(url, {
                     headers: {
@@ -32,19 +32,38 @@ function getDeployment({ vercelToken, vercelOrgId, vercelProjectId, githubBranch
                     method: "get",
                 });
                 const result = (yield response.json());
-                const deployment = result.deployments.find((d) => d.meta.githubCommitRef === githubBranch && d.meta.githubCommitSha === githubCommit);
+                const deployment = result.deployments.find((d) => d.meta.githubCommitRef === githubBranch &&
+                    d.meta.githubCommitSha === githubCommit);
                 if (deployment) {
                     return deployment;
                 }
                 if (result.pagination.next) {
-                    until = result.pagination.next;
+                    next = result.pagination.next;
                 }
                 else {
                     break;
                 }
             }
-            throw new Error('Deployment not found');
+            throw new Error("Deployment not found");
         }), { timeout: startTimeout * 1000, delay: 1000 });
+        console.log("Deployment found!");
+        if (wait) {
+            console.log("Waiting for deployment to finish...");
+            yield (0, ts_retry_promise_1.retry)(() => __awaiter(this, void 0, void 0, function* () {
+                let url = `https://api.vercel.com/v13/deployments/${deployment.uid}`;
+                const response = yield (0, cross_fetch_1.default)(url, {
+                    headers: {
+                        Authorization: `Bearer ${vercelToken}`,
+                    },
+                    method: "get",
+                });
+                if ((yield response.json()).readyState === "READY") {
+                    console.log("Deployment is ready!");
+                    return;
+                }
+                throw new Error("Deployment not found");
+            }), { timeout: finishTimeout * 1000, delay: 1000 });
+        }
         return deployment;
     });
 }
