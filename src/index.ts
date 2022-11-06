@@ -1,6 +1,7 @@
 import * as core from "@actions/core";
 
 try {
+  console.log('one')
   const args = {
     vercelToken: core.getInput("vercel-token"),
     vercelOrgId: core.getInput("vercel-org-id"),
@@ -11,6 +12,7 @@ try {
     finishTimeout: core.getInput("finish-timeout"),
     wait: core.getInput("wait"),
   };
+  console.log('two')
   console.log(args);
 
   core.setOutput("deployment-url", "todo");
