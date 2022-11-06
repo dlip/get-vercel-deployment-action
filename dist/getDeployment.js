@@ -14,15 +14,38 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getDeployment = void 0;
 const cross_fetch_1 = __importDefault(require("cross-fetch"));
-function getDeployment({ vercelToken, vercelOrgId, vercelProjectId, githubBranch, githubHash, startTimeout, finishTimeout, wait, }) {
+const ts_retry_promise_1 = require("ts-retry-promise");
+function getDeployment({ vercelToken, vercelOrgId, vercelProjectId, githubBranch, githubCommit, startTimeout, finishTimeout, wait, }) {
     return __awaiter(this, void 0, void 0, function* () {
-        const response = yield (0, cross_fetch_1.default)(`https://api.vercel.com/v6/deployments?teamId=${vercelOrgId}&projectId=${vercelProjectId}`, {
-            headers: {
-                Authorization: `Bearer ${vercelToken}`,
-            },
-            method: "get",
-        });
-        return response.json();
+        const deployment = yield (0, ts_retry_promise_1.retry)(() => __awaiter(this, void 0, void 0, function* () {
+            console.log("Finding deployment...");
+            let until = null;
+            while (true) {
+                let url = `https://api.vercel.com/v6/deployments?teamId=${vercelOrgId}&projectId=${vercelProjectId}`;
+                if (until) {
+                    url += `&until=${until}`;
+                }
+                const response = yield (0, cross_fetch_1.default)(url, {
+                    headers: {
+                        Authorization: `Bearer ${vercelToken}`,
+                    },
+                    method: "get",
+                });
+                const result = (yield response.json());
+                const deployment = result.deployments.find((d) => d.meta.githubCommitRef === githubBranch && d.meta.githubCommitSha === githubCommit);
+                if (deployment) {
+                    return deployment;
+                }
+                if (result.pagination.next) {
+                    until = result.pagination.next;
+                }
+                else {
+                    break;
+                }
+            }
+            throw new Error('Deployment not found');
+        }), { timeout: startTimeout * 1000, delay: 1000 });
+        return deployment;
     });
 }
 exports.getDeployment = getDeployment;

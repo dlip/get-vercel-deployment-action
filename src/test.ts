@@ -7,7 +7,7 @@ const args: GetDeploymentArgs = {
   vercelOrgId: process.env.VERCEL_ORG_ID as string,
   vercelProjectId: process.env.VERCEL_VERCEL_PROJECT_ID as string,
   githubBranch: process.env.GITHUB_REF_NAME as string,
-  githubHash: process.env.GITHUB_SHA as string,
+  githubCommit: process.env.GITHUB_SHA as string,
   startTimeout: parseInt(process.env.START_TIMEOUT as string),
   finishTimeout: parseInt(process.env.FINISH_TIMEOUT as string),
   wait: process.env.WAIT === 'true',

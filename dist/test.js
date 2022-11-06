@@ -31,7 +31,7 @@ const args = {
     vercelOrgId: process.env.VERCEL_ORG_ID,
     vercelProjectId: process.env.VERCEL_VERCEL_PROJECT_ID,
     githubBranch: process.env.GITHUB_REF_NAME,
-    githubHash: process.env.GITHUB_SHA,
+    githubCommit: process.env.GITHUB_SHA,
     startTimeout: parseInt(process.env.START_TIMEOUT),
     finishTimeout: parseInt(process.env.FINISH_TIMEOUT),
     wait: process.env.WAIT === 'true',

@@ -7,7 +7,7 @@ try {
     vercelOrgId: core.getInput("vercel-org-id"),
     vercelProjectId: core.getInput("vercel-project-id"),
     githubBranch: core.getInput("github-branch"),
-    githubHash: core.getInput("github-hash"),
+    githubCommit: core.getInput("github-commit"),
     startTimeout: parseInt(core.getInput("start-timeout")),
     finishTimeout: parseInt(core.getInput("finish-timeout")),
     wait: core.getBooleanInput("wait"),
