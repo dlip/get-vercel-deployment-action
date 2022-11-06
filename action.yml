@@ -1,13 +1,33 @@
 name: 'Get Vercel URL'
 description: 'Get the Vercel URL from a build'
 inputs:
-  who-to-greet:  # id of input
-    description: 'Who to greet'
+  vercel-token:
+    description: 'Vercel token'
     required: true
-    default: 'World'
+  vercel-org-id:
+    description: 'Vercel org id'
+    required: true
+  vercel-project-id:
+    description: 'Vercel project id'
+    required: true
+  github-branch:
+    description: 'Github branch'
+    required: true
+  github-hash:
+    description: 'Github commit hash'
+    required: true
+  start-timeout:
+    description: 'How long to wait to see deployment starting'
+    default: 30
+  finish-timeout:
+    description: 'How long to wait to see deployment finish'
+    default: 600
+  wait:
+    description: 'Should it wait until the deployment is ready'
+    default: true
 outputs:
-  time: # id of output
-    description: 'The time we greeted you'
+  deployment-url:
+    description: 'Deployment URL'
 runs:
   using: 'node16'
   main: 'dist/index.js'
