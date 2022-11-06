@@ -23,24 +23,17 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const core = __importStar(require("@actions/core"));
 const getDeployment_1 = require("./getDeployment");
-try {
-    const args = {
-        vercelToken: core.getInput("vercel-token"),
-        vercelOrgId: core.getInput("vercel-org-id"),
-        vercelProjectId: core.getInput("vercel-project-id"),
-        githubBranch: core.getInput("github-branch"),
-        githubHash: core.getInput("github-hash"),
-        startTimeout: parseInt(core.getInput("start-timeout")),
-        finishTimeout: parseInt(core.getInput("finish-timeout")),
-        wait: core.getBooleanInput("wait"),
-    };
-    console.log(args);
-    (0, getDeployment_1.getDeployment)(args).then((deployment) => {
-        core.setOutput("deployment-url", deployment.url);
-    });
-}
-catch (error) {
-    core.setFailed(error.message);
-}
+const dotenv = __importStar(require("dotenv"));
+dotenv.config();
+const args = {
+    vercelToken: process.env.VERCEL_TOKEN,
+    vercelOrgId: process.env.VERCEL_ORG_ID,
+    vercelProjectId: process.env.VERCEL_VERCEL_PROJECT_ID,
+    githubBranch: process.env.GITHUB_REF_NAME,
+    githubHash: process.env.GITHUB_SHA,
+    startTimeout: parseInt(process.env.START_TIMEOUT),
+    finishTimeout: parseInt(process.env.FINISH_TIMEOUT),
+    wait: process.env.WAIT === 'true',
+};
+(0, getDeployment_1.getDeployment)(args).then(console.log);

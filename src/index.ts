@@ -1,22 +1,22 @@
 import * as core from "@actions/core";
+import { getDeployment, GetDeploymentArgs } from "./getDeployment";
 
 try {
-  console.log('one')
-  const args = {
+  const args: GetDeploymentArgs = {
     vercelToken: core.getInput("vercel-token"),
     vercelOrgId: core.getInput("vercel-org-id"),
     vercelProjectId: core.getInput("vercel-project-id"),
     githubBranch: core.getInput("github-branch"),
     githubHash: core.getInput("github-hash"),
-    startTimeout: core.getInput("start-timeout"),
-    finishTimeout: core.getInput("finish-timeout"),
-    wait: core.getInput("wait"),
+    startTimeout: parseInt(core.getInput("start-timeout")),
+    finishTimeout: parseInt(core.getInput("finish-timeout")),
+    wait: core.getBooleanInput("wait"),
   };
-  console.log('two')
   console.log(args);
 
-  core.setOutput("deployment-url", "todo");
+  getDeployment(args).then((deployment: any) => {
+    core.setOutput("deployment-url", deployment.url);
+  });
 } catch (error: unknown) {
-  console.error(error);
   core.setFailed((error as Error).message);
 }

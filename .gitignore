@@ -1,3 +1,6 @@
+.env
 node_modules/typescript
 node_modules/.bin/tsc
 node_modules/.bin/tsserver
+node_modules/dotenv
+node_modules/@types
