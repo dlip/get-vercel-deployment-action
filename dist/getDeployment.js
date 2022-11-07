@@ -45,7 +45,7 @@ function getDeployment({ vercelToken, vercelOrgId, vercelProjectId, githubBranch
                 }
             }
             throw new Error("Deployment not found");
-        }), { timeout: startTimeout * 1000, delay: 1000 });
+        }), { timeout: startTimeout * 1000, delay: 1000, retries: "INFINITELY" });
         console.log("Deployment found!");
         if (wait) {
             console.log("Waiting for deployment to finish...");
@@ -62,7 +62,7 @@ function getDeployment({ vercelToken, vercelOrgId, vercelProjectId, githubBranch
                     return;
                 }
                 throw new Error("Deployment not found");
-            }), { timeout: finishTimeout * 1000, delay: 1000 });
+            }), { timeout: finishTimeout * 1000, delay: 1000, retries: "INFINITELY" });
         }
         return deployment;
     });
