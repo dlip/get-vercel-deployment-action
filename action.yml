@@ -1,5 +1,5 @@
-name: 'Get Vercel URL'
-description: 'Get the Vercel URL from a build'
+name: 'Get Vercel Deployment'
+description: 'Get the Vercel Deployment information'
 inputs:
   vercel-token:
     description: 'Vercel token'
