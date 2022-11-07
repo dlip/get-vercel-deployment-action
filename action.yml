@@ -1,36 +1,36 @@
-name: 'Get Vercel Deployment'
-description: 'Get the Vercel Deployment information'
+name: "Get Vercel Deployment"
+description: "Get Vercel Deployment information"
 inputs:
   vercel-token:
-    description: 'Vercel token'
+    description: "Vercel token"
     required: true
   vercel-org-id:
-    description: 'Vercel org id'
+    description: "Vercel org id"
     required: true
   vercel-project-id:
-    description: 'Vercel project id'
+    description: "Vercel project id"
     required: true
   github-branch:
-    description: 'Github branch'
+    description: "Github branch"
     required: true
   github-commit:
-    description: 'Github commit commit'
+    description: "Github commit commit"
     required: true
   start-timeout:
-    description: 'How long to wait to see deployment starting'
+    description: "How long to wait to see deployment starting"
     default: 600
   finish-timeout:
-    description: 'How long to wait to see deployment finish'
+    description: "How long to wait to see deployment finish"
     default: 600
   pagination-limit:
-    description: 'How many pages to search for the deployment'
+    description: "How many pages to search for the deployment"
     default: 1
   wait:
-    description: 'Should it wait until the deployment is ready'
+    description: "Should it wait until the deployment is ready"
     default: true
 outputs:
   deployment-url:
-    description: 'Deployment URL'
+    description: "Deployment URL"
 runs:
-  using: 'node16'
-  main: 'dist/index.js'
+  using: "node16"
+  main: "dist/index.js"
