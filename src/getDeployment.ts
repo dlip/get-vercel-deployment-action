@@ -143,7 +143,7 @@ export async function getDeployment({
       }
       throw new Error("Deployment not found");
     },
-    { timeout: startTimeout * 1000, delay: 1000 }
+    { timeout: startTimeout * 1000, delay: 1000, retries: "INFINITELY" }
   );
   console.log("Deployment found!");
   if (wait) {
@@ -163,7 +163,7 @@ export async function getDeployment({
         }
         throw new Error("Deployment not found");
       },
-      { timeout: finishTimeout * 1000, delay: 1000 }
+      { timeout: finishTimeout * 1000, delay: 1000, retries: "INFINITELY" }
     );
   }
 
