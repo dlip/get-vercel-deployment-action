@@ -11,7 +11,7 @@
 | `github-commit`     | ✅       |         | Commit that matches the deployment                                                                          |
 | `start-timeout`     | ✖️       | `600`   | How long to wait to see the deployment starting                                                             |
 | `finish-timeout`    | ✖️       | `600`   | How long to wait to see the deployment finish (if `wait` is set to `true`)                                  |
-| `pagination-limit`  | ✖️       | `61`    | Vercel's api gives back 20 deployments per page, if this is a new deployment it should be on the first page |
+| `pagination-limit`  | ✖️       | `1`     | Vercel's api gives back 20 deployments per page, if this is a new deployment it should be on the first page |
 | `wait`              | ✖️       | `true`  | If the action should wait for the deployment to finish deploying                                            |
 
 ## Outputs
