@@ -24,7 +24,7 @@ inputs:
     default: 600
   pagination-limit:
     description: 'How many pages to search for the deployment'
-    default: 2
+    default: 1
   wait:
     description: 'Should it wait until the deployment is ready'
     default: true
