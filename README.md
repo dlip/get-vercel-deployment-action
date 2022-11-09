@@ -31,7 +31,7 @@ jobs:
   my_job:
     runs-on: ubuntu-latest
     steps:
-      - uses: dlip/get-vercel-deployment-action@v1.0.1
+      - uses: dlip/get-vercel-deployment-action@v1.0.2
         id: get-vercel-deployment
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}

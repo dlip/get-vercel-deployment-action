@@ -158,12 +158,11 @@ export async function getDeployment({
           method: "get",
         });
         const deploymentDetails = await response.json();
-        console.log(deploymentDetails);
         if (deploymentDetails.readyState === "READY") {
           console.log("Deployment is ready!");
           return;
         } else if (deploymentDetails.readyState === "ERROR") {
-          return new Error("Deployment Error in Vercel");
+          return new Error("Build failed in Vercel");
         }
         throw new Error("Deployment not ready");
       },
