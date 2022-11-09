@@ -49,7 +49,7 @@ function getDeployment({ vercelToken, vercelOrgId, vercelProjectId, githubBranch
         console.log("Deployment found!");
         if (wait) {
             console.log("Waiting for deployment to finish...");
-            yield (0, ts_retry_promise_1.retry)(() => __awaiter(this, void 0, void 0, function* () {
+            const error = yield (0, ts_retry_promise_1.retry)(() => __awaiter(this, void 0, void 0, function* () {
                 let url = `https://api.vercel.com/v13/deployments/${deployment.uid}`;
                 const response = yield (0, cross_fetch_1.default)(url, {
                     headers: {
@@ -57,12 +57,20 @@ function getDeployment({ vercelToken, vercelOrgId, vercelProjectId, githubBranch
                     },
                     method: "get",
                 });
-                if ((yield response.json()).readyState === "READY") {
+                const deploymentDetails = yield response.json();
+                console.log(deploymentDetails);
+                if (deploymentDetails.readyState === "READY") {
                     console.log("Deployment is ready!");
                     return;
                 }
-                throw new Error("Deployment not found");
+                else if (deploymentDetails.readyState === "ERROR") {
+                    return new Error("Deployment Error in Vercel");
+                }
+                throw new Error("Deployment not ready");
             }), { timeout: finishTimeout * 1000, delay: 1000, retries: "INFINITELY" });
+            if (error) {
+                throw error;
+            }
         }
         return deployment;
     });

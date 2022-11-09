@@ -14,4 +14,4 @@ const args: GetDeploymentArgs = {
   wait: process.env.WAIT === 'true',
 };
 
-getDeployment(args).then(console.log)
+getDeployment(args).then(console.log).catch(console.error)

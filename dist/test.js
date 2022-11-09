@@ -37,4 +37,4 @@ const args = {
     paginationLimit: parseInt(process.env.PAGINATION_LIMIT),
     wait: process.env.WAIT === 'true',
 };
-(0, getDeployment_1.getDeployment)(args).then(console.log);
+(0, getDeployment_1.getDeployment)(args).then(console.log).catch(console.error);

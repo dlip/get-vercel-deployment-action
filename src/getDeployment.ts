@@ -148,7 +148,7 @@ export async function getDeployment({
   console.log("Deployment found!");
   if (wait) {
     console.log("Waiting for deployment to finish...");
-    await retry(
+    const error = await retry(
       async () => {
         let url = `https://api.vercel.com/v13/deployments/${deployment.uid}`;
         const response = await fetch(url, {
@@ -157,14 +157,21 @@ export async function getDeployment({
           },
           method: "get",
         });
-        if ((await response.json()).readyState === "READY") {
+        const deploymentDetails = await response.json();
+        console.log(deploymentDetails);
+        if (deploymentDetails.readyState === "READY") {
           console.log("Deployment is ready!");
           return;
+        } else if (deploymentDetails.readyState === "ERROR") {
+          return new Error("Deployment Error in Vercel");
         }
-        throw new Error("Deployment not found");
+        throw new Error("Deployment not ready");
       },
       { timeout: finishTimeout * 1000, delay: 1000, retries: "INFINITELY" }
     );
+    if (error) {
+      throw error;
+    }
   }
 
   return deployment;
